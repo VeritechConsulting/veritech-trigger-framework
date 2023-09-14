@@ -3,6 +3,8 @@
     <types>
 		<members>BaseTriggerHandler</members>
 		<members>BaseTriggerHandlerTest</members>
+		<members>TriggerUtil</members>
+		<members>TriggerUtilTest</members>
 		<name>ApexClass</name>
 	</types>
 	<version>58.0</version>
