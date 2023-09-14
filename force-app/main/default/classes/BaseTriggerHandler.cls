@@ -29,11 +29,9 @@ public abstract class BaseTriggerHandler {
     private String triggerHandlerName;
     @TestVisible
     private Type triggerHandlerType;
-    @TestVisible
-    private SObjectType sObjectType;
-    @TestVisible
-    private DescribeSObjectResult sObjectDescribe;
 
+    @TestVisible
+    public SObjectType sObjectType { get; private set; }
     @TestVisible
     public TriggerOperation operationType { get; private set; }
     @TestVisible
@@ -73,7 +71,6 @@ public abstract class BaseTriggerHandler {
         if (Trigger.isExecuting) {
             this.initializeTriggerContext();
             this.sObjectType = this.getObjectType();
-            this.sObjectDescribe = this.sObjectType.getDescribe(SObjectDescribeOptions.DEFERRED);
         }
     }
 
@@ -234,41 +231,5 @@ public abstract class BaseTriggerHandler {
         if (objectType != null) {
             disabledTriggerObjects.remove(objectType);
         }
-    }
-
-    //================================================================================
-    // Public trigger utilities
-    //================================================================================
-
-    public Set<Id> getNewIDs() {
-        return this.newMap.keySet();
-    }
-
-    public Set<Id> getOldIDs() {
-        return this.oldMap.keySet();
-    }
-
-    public Id getRecordTypeId(String developerName) {
-        return this.sObjectDescribe.getRecordTypeInfosByDeveloperName().get(developerName)?.getRecordTypeId();
-    }
-
-    public Boolean fieldValueChanged(SObject newRecord, SObjectField field) {
-        return this.isDelete
-            ? null
-            : this.isInsert || this.isUndelete || newRecord.get(field) != this.oldMap.get(newRecord.Id).get(field);
-    }
-
-    public Boolean fieldValueChangedTo(SObject newRecord, SObjectField field, Object newValue) {
-        return this.fieldValueChanged(newRecord, field) && newRecord.get(field) == newValue;
-    }
-
-    public Boolean fieldValueChangedFrom(SObject newRecord, SObjectField field, Object oldValue) {
-        return this.fieldValueChanged(newRecord, field) && this.oldMap.get(newRecord.Id).get(field) == oldValue;
-    }
-
-    // Suppressing ExcessiveParameterList because accepting a wrapper would be detrimental to ease-of-use
-    @SuppressWarnings('PMD.ExcessiveParameterList')
-    public Boolean fieldValueChangedFromTo(SObject newRecord, SObjectField field, Object oldValue, Object newValue) {
-        return this.fieldValueChangedFrom(newRecord, field, oldValue) && newRecord.get(field) == newValue;
     }
 }
