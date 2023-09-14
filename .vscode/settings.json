@@ -1,0 +1,22 @@
+{
+    "apexPMD.rulesets": [
+        ".pmd/apex-ruleset.xml",
+        ".pmd/veritech-ruleset.xml"
+    ],
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true,
+    "editor.formatOnType": true,
+    "eslint.options": {
+        "useEslintrc": false,
+        "parserOptions": {
+            "ecmaVersion": "latest"
+        }
+    },
+    "prettier.configPath": ".prettierrc",
+    "prettier.useEditorConfig": false,
+    "search.exclude": {
+        "**/.sfdx": true,
+        "**/bower_components": true,
+        "**/node_modules": true
+    }
+}

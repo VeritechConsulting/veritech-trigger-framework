@@ -1,0 +1,138 @@
+<?xml version="1.0" ?>
+<ruleset
+    name="Veritech Custom Rules"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd"
+>
+    <description>Veritech custom rules</description>
+    <exclude-pattern>.*/.sfdx/.*</exclude-pattern>
+    <!-- Standard rules from PMD but not in the Apex PMD ruleset -->
+    <rule
+        ref="category/apex/performance.xml/AvoidDebugStatements"
+        message="Avoid debug statements since they impact performance negatively"
+    >
+        <priority>2</priority>
+    </rule>
+    <rule ref="category/apex/bestpractices.xml/UnusedLocalVariable">
+        <priority>2</priority>
+    </rule>
+    <rule ref="category/apex/codestyle.xml/FieldDeclarationsShouldBeAtStart">
+        <priority>2</priority>
+    </rule>
+
+    <!-- Veritech custom rules -->
+    <rule
+        name="ClassReferenceCapitalization-ReferenceExpression"
+        language="apex"
+        message="References to classes should start with an uppercase character followed by lowercase characters"
+        class="net.sourceforge.pmd.lang.rule.XPathRule"
+    >
+        <priority>3</priority>
+        <properties>
+            <property name="version" value="2.0" />
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //ReferenceExpression[
+                            matches(@Image, '^[a-z]|^[A-Z][A-Z]+')
+                            and (
+                                lower-case(@Image)='blob'
+                                or lower-case(@Image)='boolean'
+                                or lower-case(@Image)='date'
+                                or lower-case(@Image)='datetime'
+                                or lower-case(@Image)='decimal'
+                                or lower-case(@Image)='double'
+                                or lower-case(@Image)='double'
+                                or lower-case(@Image)='id'
+                                or lower-case(@Image)='integer'
+                                or lower-case(@Image)='long'
+                                or lower-case(@Image)='object'
+                                or lower-case(@Image)='string'
+                                or lower-case(@Image)='time'
+                                or lower-case(@Image)='system'
+                                or lower-case(@Image)='database'
+                                or lower-case(@Image)='test'
+                                or lower-case(@Image)='assert'
+                                or lower-case(@Image)='messaging'
+                                or lower-case(@Image)='schema'
+                            )
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+    <rule
+        name="ClassReferenceCapitalization-ModifierNode"
+        language="apex"
+        message="References to classes should start with an uppercase character followed by lowercase characters"
+        class="net.sourceforge.pmd.lang.rule.XPathRule"
+    >
+        <priority>3</priority>
+        <properties>
+            <property name="version" value="2.0" />
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //ModifierNode[
+                            matches(../@ReturnType, '^[a-z]|^[A-Z][A-Z]+')
+                            and (
+                                starts-with(lower-case(../@ReturnType), 'system')
+                                or starts-with(lower-case(../@ReturnType), 'database')
+                                or starts-with(lower-case(../@ReturnType), 'messaging')
+                                or starts-with(lower-case(../@ReturnType), 'schema')
+                            )
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+    <rule
+        name="ClassReferenceCapitalization-Parameter"
+        language="apex"
+        message="References to classes should start with an uppercase character followed by lowercase characters"
+        class="net.sourceforge.pmd.lang.rule.XPathRule"
+    >
+        <priority>3</priority>
+        <properties>
+            <property name="version" value="2.0" />
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //Parameter[
+                            matches(@Type, '^[a-z]|^[A-Z][A-Z]+')
+                            and (
+                                starts-with(lower-case(@Type), 'system')
+                                or starts-with(lower-case(@Type), 'database')
+                                or starts-with(lower-case(@Type), 'messaging')
+                                or starts-with(lower-case(@Type), 'schema')
+                            )
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+    <rule
+        name="UsageOfSystemAssert"
+        language="apex"
+        message="Use the Assert class in test methods instead of System.assert"
+        class="net.sourceforge.pmd.lang.rule.XPathRule"
+    >
+        <priority>2</priority>
+        <properties>
+            <property name="version" value="2.0" />
+            <property name="xpath">
+                <value>
+                    <![CDATA[
+                        //MethodCallExpression[
+                            starts-with(lower-case(@FullMethodName), 'system.assert')
+                        ]
+                    ]]>
+                </value>
+            </property>
+        </properties>
+    </rule>
+</ruleset>

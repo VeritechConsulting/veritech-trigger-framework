@@ -1,0 +1,274 @@
+// Suppressing ExcessivePublicCount because keeping everything in a single class is a deliberate design decision
+// Suppressing EmptyStatementBlock because the virtual methods are empty by design as they are meant to be overriden
+@SuppressWarnings('PMD.ExcessivePublicCount, PMD.EmptyStatementBlock')
+public abstract class BaseTriggerHandler {
+    //================================================================================
+    // Constants and other static variables
+    //================================================================================
+
+    @TestVisible
+    private static final Boolean ALLOW_RECURSION_DEFAULT = false;
+
+    // Static variable used to determine if recursion is happening
+    @TestVisible
+    private static Set<String> triggerHandlerAndOperation = new Set<String>();
+
+    // Static variables used to disable trigger execution
+    @TestVisible
+    private static Set<Type> disabledTriggerHandlers = new Set<Type>();
+    @TestVisible
+    private static Set<SObjectType> disabledTriggerObjects = new Set<SObjectType>();
+
+    //================================================================================
+    // Instance properties
+    //================================================================================
+
+    @TestVisible
+    private Boolean allowRecursion;
+    @TestVisible
+    private String triggerHandlerName;
+    @TestVisible
+    private Type triggerHandlerType;
+    @TestVisible
+    private SObjectType sObjectType;
+    @TestVisible
+    private DescribeSObjectResult sObjectDescribe;
+
+    @TestVisible
+    public TriggerOperation operationType { get; private set; }
+    @TestVisible
+    public List<SObject> newList { get; private set; }
+    @TestVisible
+    public Map<Id, SObject> newMap { get; private set; }
+    @TestVisible
+    public List<SObject> oldList { get; private set; }
+    @TestVisible
+    public Map<Id, SObject> oldMap { get; private set; }
+    @TestVisible
+    public Boolean isBefore { get; private set; }
+    @TestVisible
+    public Boolean isAfter { get; private set; }
+    @TestVisible
+    public Boolean isInsert { get; private set; }
+    @TestVisible
+    public Boolean isUpdate { get; private set; }
+    @TestVisible
+    public Boolean isDelete { get; private set; }
+    @TestVisible
+    public Boolean isUndelete { get; private set; }
+
+    //================================================================================
+    // Constructors and constructor helpers
+    //================================================================================
+
+    protected BaseTriggerHandler() {
+        this(ALLOW_RECURSION_DEFAULT);
+    }
+
+    protected BaseTriggerHandler(Boolean allowRecursion) {
+        this.allowRecursion = allowRecursion != null ? allowRecursion : ALLOW_RECURSION_DEFAULT;
+        this.triggerHandlerName = this.getExecutingClassName();
+        this.triggerHandlerType = this.getExecutingClassType();
+
+        if (Trigger.isExecuting) {
+            this.initializeTriggerContext();
+            this.sObjectType = this.getObjectType();
+            this.sObjectDescribe = this.sObjectType.getDescribe(SObjectDescribeOptions.DEFERRED);
+        }
+    }
+
+    @TestVisible
+    private void initializeTriggerContext() {
+        this.operationType = Trigger.operationType;
+        this.newList = Trigger.new == null ? new List<SObject>() : Trigger.new;
+        this.newMap = Trigger.newMap == null ? new Map<Id, SObject>() : Trigger.newMap;
+        this.oldList = Trigger.old == null ? new List<SObject>() : Trigger.old;
+        this.oldMap = Trigger.oldMap == null ? new Map<Id, SObject>() : Trigger.oldMap;
+        this.isBefore = Trigger.isBefore;
+        this.isAfter = Trigger.isAfter;
+        this.isInsert = Trigger.isInsert;
+        this.isUpdate = Trigger.isUpdate;
+        this.isDelete = Trigger.isDelete;
+        this.isUndelete = Trigger.isUndelete;
+    }
+
+    @TestVisible
+    private String getExecutingClassName() {
+        return String.valueOf(this).substringBefore(':');
+    }
+
+    @TestVisible
+    private Type getExecutingClassType() {
+        return Type.forName(this.triggerHandlerName);
+    }
+
+    @TestVisible
+    private SObjectType getObjectType() {
+        return this.isDelete ? this.oldList.getSObjectType() : this.newList.getSObjectType();
+    }
+
+    //================================================================================
+    // Virtual (overridable) methods, run method, and run helpers
+    //================================================================================
+
+    @TestVisible
+    protected virtual void beforeInsert() {
+    }
+    @TestVisible
+    protected virtual void beforeUpdate() {
+    }
+    @TestVisible
+    protected virtual void beforeDelete() {
+    }
+    @TestVisible
+    protected virtual void afterInsert() {
+    }
+    @TestVisible
+    protected virtual void afterUpdate() {
+    }
+    @TestVisible
+    protected virtual void afterDelete() {
+    }
+    @TestVisible
+    protected virtual void afterUndelete() {
+    }
+
+    public void run() {
+        if (this.canRun()) {
+            switch on this.operationType {
+                when BEFORE_INSERT {
+                    this.beforeInsert();
+                }
+                when BEFORE_UPDATE {
+                    this.beforeUpdate();
+                }
+                when BEFORE_DELETE {
+                    this.beforeDelete();
+                }
+                when AFTER_INSERT {
+                    this.afterInsert();
+                }
+                when AFTER_UPDATE {
+                    this.afterUpdate();
+                }
+                when AFTER_DELETE {
+                    this.afterDelete();
+                }
+                when AFTER_UNDELETE {
+                    this.afterUndelete();
+                }
+            }
+
+            this.processAfterRun();
+        }
+    }
+
+    @TestVisible
+    private Boolean canRun() {
+        return this.triggerIsEnabled() && (this.allowRecursion || this.isFirstRun());
+    }
+
+    @TestVisible
+    private Boolean triggerIsEnabled() {
+        return !disabledTriggerHandlers.contains(this.triggerHandlerType) &&
+            !disabledTriggerObjects.contains(this.sObjectType);
+    }
+
+    @TestVisible
+    private Boolean isFirstRun() {
+        return !triggerHandlerAndOperation.contains(this.triggerHandlerName + this.operationType);
+    }
+
+    @TestVisible
+    private void processAfterRun() {
+        triggerHandlerAndOperation.add(this.triggerHandlerName + this.operationType);
+    }
+
+    //================================================================================
+    // Static methods to disable/enable trigger execution
+    //================================================================================
+
+    public static void disableTriggers(Set<Type> triggerHandlers) {
+        if (triggerHandlers != null) {
+            disabledTriggerHandlers.addAll(triggerHandlers);
+        }
+    }
+
+    public static void disableTriggers(Set<SObjectType> objectTypes) {
+        if (objectTypes != null) {
+            disabledTriggerObjects.addAll(objectTypes);
+        }
+    }
+
+    public static void disableTrigger(Type triggerHandler) {
+        if (triggerHandler != null) {
+            disabledTriggerHandlers.add(triggerHandler);
+        }
+    }
+
+    public static void disableTrigger(SObjectType objectType) {
+        if (objectType != null) {
+            disabledTriggerObjects.add(objectType);
+        }
+    }
+
+    public static void enableTriggers(Set<Type> triggerHandlers) {
+        if (triggerHandlers != null) {
+            disabledTriggerHandlers.removeAll(triggerHandlers);
+        }
+    }
+
+    public static void enableTriggers(Set<SObjectType> objectTypes) {
+        if (objectTypes != null) {
+            disabledTriggerObjects.removeAll(objectTypes);
+        }
+    }
+
+    public static void enableTrigger(Type triggerHandler) {
+        if (triggerHandler != null) {
+            disabledTriggerHandlers.remove(triggerHandler);
+        }
+    }
+
+    public static void enableTrigger(SObjectType objectType) {
+        if (objectType != null) {
+            disabledTriggerObjects.remove(objectType);
+        }
+    }
+
+    //================================================================================
+    // Public trigger utilities
+    //================================================================================
+
+    public Set<Id> getNewIDs() {
+        return this.newMap.keySet();
+    }
+
+    public Set<Id> getOldIDs() {
+        return this.oldMap.keySet();
+    }
+
+    public Id getRecordTypeId(String developerName) {
+        return this.sObjectDescribe.getRecordTypeInfosByDeveloperName().get(developerName)?.getRecordTypeId();
+    }
+
+    public Boolean fieldValueChanged(SObject newRecord, SObjectField field) {
+        return this.isDelete
+            ? null
+            : this.isInsert || this.isUndelete || newRecord.get(field) != this.oldMap.get(newRecord.Id).get(field);
+    }
+
+    public Boolean fieldValueChangedTo(SObject newRecord, SObjectField field, Object newValue) {
+        return this.fieldValueChanged(newRecord, field) && newRecord.get(field) == newValue;
+    }
+
+    public Boolean fieldValueChangedFrom(SObject newRecord, SObjectField field, Object oldValue) {
+        return this.fieldValueChanged(newRecord, field) && this.oldMap.get(newRecord.Id).get(field) == oldValue;
+    }
+
+    // Suppressing ExcessiveParameterList because accepting a wrapper would be detrimental to ease-of-use
+    @SuppressWarnings('PMD.ExcessiveParameterList')
+    public Boolean fieldValueChangedFromTo(SObject newRecord, SObjectField field, Object oldValue, Object newValue) {
+        return this.fieldValueChangedFrom(newRecord, field, oldValue) && newRecord.get(field) == newValue;
+    }
+}
