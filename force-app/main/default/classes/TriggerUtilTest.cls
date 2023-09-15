@@ -3,6 +3,22 @@
 @IsTest(IsParallel=true)
 private with sharing class TriggerUtilTest {
     //================================================================================
+    // Helpers
+    //================================================================================
+    static Integer fakeIdCounter = 1;
+
+    static Id generateFakeId(SObjectType objectType) {
+        String objectPrefix = objectType.getDescribe().getKeyPrefix();
+        String fakeIdCounterStr = String.valueOf(fakeIdCounter++);
+        Id fakeId = Id.valueOf(objectPrefix + '0'.repeat(12 - fakeIdCounterStr.length()) + fakeIdCounterStr);
+        return fakeId;
+    }
+
+    static SObjectType getSObjectTypeFromString(String objectTypeStr) {
+        return ((SObject) Type.forName(objectTypeStr).newInstance()).getSObjectType();
+    }
+
+    //================================================================================
     // Unit tests
     //================================================================================
 
@@ -642,25 +658,6 @@ private with sharing class TriggerUtilTest {
         Test.stopTest();
 
         Assert.isTrue(fieldValueChangedFromTo, 'Expected the resulting "fieldValueChangedFromTo" to be true');
-    }
-
-    //================================================================================
-    // Helpers
-    //================================================================================
-
-    // Suppressing FieldDeclarationsShouldBeAtStart in order to keep all helper code together
-    @SuppressWarnings('PMD.FieldDeclarationsShouldBeAtStart')
-    static Integer fakeIdCounter = 1;
-
-    static Id generateFakeId(SObjectType objectType) {
-        String objectPrefix = objectType.getDescribe().getKeyPrefix();
-        String fakeIdCounterStr = String.valueOf(fakeIdCounter++);
-        Id fakeId = Id.valueOf(objectPrefix + '0'.repeat(12 - fakeIdCounterStr.length()) + fakeIdCounterStr);
-        return fakeId;
-    }
-
-    static SObjectType getSObjectTypeFromString(String objectTypeStr) {
-        return ((SObject) Type.forName(objectTypeStr).newInstance()).getSObjectType();
     }
 
     //================================================================================

@@ -1,6 +1,5 @@
 // Suppressing MethodNamingConventions because naming format is methodBeingTested_testScenario_expectedResult
-// Suppressing EmptyStatementBlock because the overriden methods are empty by design
-@SuppressWarnings('PMD.MethodNamingConventions, PMD.EmptyStatementBlock')
+@SuppressWarnings('PMD.MethodNamingConventions')
 @IsTest(IsParallel=true)
 private with sharing class BaseTriggerHandlerTest {
     //================================================================================

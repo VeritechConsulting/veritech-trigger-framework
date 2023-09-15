@@ -1,6 +1,5 @@
-// Suppressing ExcessivePublicCount because keeping everything in a single class is a deliberate design decision
 // Suppressing EmptyStatementBlock because the virtual methods are empty by design as they are meant to be overriden
-@SuppressWarnings('PMD.ExcessivePublicCount, PMD.EmptyStatementBlock')
+@SuppressWarnings('PMD.EmptyStatementBlock')
 public abstract class BaseTriggerHandler {
     //================================================================================
     // Constants and other static variables
