@@ -105,11 +105,11 @@ public class AccountTriggerHandler extends BaseTriggerHandler {
     TriggerUtil triggerUtil;
 
     public AccountTriggerHandler() {
-        triggerUtil = new TriggerUtil(this);
+        this.triggerUtil = new TriggerUtil(this);
     }
 
     protected override void beforeUpdate() {
-        Set<Id> newRecordIds = triggerUtil.getNewIDs();
+        Set<Id> newRecordIds = this.triggerUtil.getNewIDs();
         // Other before update logic
     }
 }
