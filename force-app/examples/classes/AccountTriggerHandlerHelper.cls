@@ -49,6 +49,9 @@ public with sharing class AccountTriggerHandlerHelper {
     // Forces an update on parent accounts when updating the parent field
     public void updateParentAccounts() {
         Set<Id> changedParentIds = new Set<Id>();
+
+        // The trigger framework automatically initializes newList and oldList to empty collections
+        // so there is no need to check for null
         changedParentIds.addAll(this.getChangedParentIds(this.newList));
         changedParentIds.addAll(this.getChangedParentIds(this.oldList));
 
