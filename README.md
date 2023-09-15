@@ -24,7 +24,7 @@ public class AccountTriggerHandler extends BaseTriggerHandler {
 Create a minimal trigger file with no business logic. The trigger creates a new instance of the trigger handler and calls the `run()` method to begin execution.
 
 ```apex
-trigger AccountTrigger on Account(before insert after insert) {
+trigger AccountTrigger on Account(before insert, after insert) {
     new AccountTriggerHandler().run();
 }
 ```
@@ -62,7 +62,7 @@ Note that all the lists and maps are initialized to empty collections by the tri
 By default, the trigger framework prevents recursion in order to avoid hitting governor limits. However, if you need to allow recursion in your triggers, modify the trigger handler initialization by passing an optional Boolean parameter.
 
 ```apex
-trigger AccountTrigger on Account(before insert after insert) {
+trigger AccountTrigger on Account(before insert, after insert) {
     Boolean allowRecursion = true;
     new AccountTriggerHandler(allowRecursion).run();
 }
