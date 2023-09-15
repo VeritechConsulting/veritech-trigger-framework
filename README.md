@@ -96,9 +96,9 @@ BaseTriggerHandler.enableTriggers(objectTriggers);
 ```
 
 ## Additional utilities
-Installing the class `TriggerUtil` will give you access to additional utility methods to perform common operations needed in during trigger execution.
+Installing the class `TriggerUtil` gives you access to additional utility methods to perform common operations needed during trigger execution.
 
-To use, create an instance of `TriggerUtil` by passing a reference to your trigger handler and call the utility methods.
+To use, create an instance of `TriggerUtil` by passing a reference to your trigger handler object (using `this`) and call the utility methods.
 
 ```apex
 public class AccountTriggerHandler extends BaseTriggerHandler {
@@ -118,11 +118,11 @@ public class AccountTriggerHandler extends BaseTriggerHandler {
 These are the definitions for the available trigger utility methods:
 
 ```apex
-Set<Id> getNewIDs()
-Set<Id> getOldIDs()
-Id getRecordTypeId(String developerName)
-Boolean fieldValueChanged(SObject newRecord, SObjectField field)
-Boolean fieldValueChangedTo(SObject newRecord, SObjectField field, Object newValue)
-Boolean fieldValueChangedFrom(SObject newRecord, SObjectField field, Object oldValue)
-Boolean fieldValueChangedFromTo(SObject newRecord, SObjectField field, Object oldValue, Object newValue)
+Set<Id> getNewIDs();
+Set<Id> getOldIDs();
+Id getRecordTypeId(String developerName);
+Boolean fieldValueChanged(SObject newRecord, SObjectField field);
+Boolean fieldValueChangedTo(SObject newRecord, SObjectField field, Object newValue);
+Boolean fieldValueChangedFrom(SObject newRecord, SObjectField field, Object oldValue);
+Boolean fieldValueChangedFromTo(SObject newRecord, SObjectField field, Object oldValue, Object newValue);
 ```
