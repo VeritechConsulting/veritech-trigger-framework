@@ -1,5 +1,5 @@
 # Veritech Trigger Framework
-A minimal Apex trigger framework for Salesforce that is packed with functionality.
+A lightweight Apex trigger framework for Salesforce that is packed with functionality.
 
 ## How to install
 Simply, copy the class `BaseTriggerHandler` (and associated `BaseTriggerHandlerTest`) to your org and you are ready to start using the trigger framework!
