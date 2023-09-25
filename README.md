@@ -29,7 +29,7 @@ trigger AccountTrigger on Account(before insert, after insert) {
 }
 ```
 
-A full working example can be found in the folder [force-app/examples](force-app/examples).
+A full working example can be found in the folder [examples](examples).
 
 ## Features
 ### Methods that can be overriden
