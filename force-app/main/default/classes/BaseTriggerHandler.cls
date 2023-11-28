@@ -131,6 +131,8 @@ public abstract class BaseTriggerHandler {
 
     public void run() {
         if (this.canRun()) {
+            this.registerRun();
+
             switch on this.operationType {
                 when BEFORE_INSERT {
                     this.beforeInsert();
@@ -154,8 +156,6 @@ public abstract class BaseTriggerHandler {
                     this.afterUndelete();
                 }
             }
-
-            this.processAfterRun();
         }
     }
 
@@ -176,13 +176,21 @@ public abstract class BaseTriggerHandler {
     }
 
     @TestVisible
-    private void processAfterRun() {
+    private void registerRun() {
         triggerHandlerAndOperation.add(this.triggerHandlerName + this.operationType);
     }
 
     //================================================================================
     // Static methods to disable/enable trigger execution
     //================================================================================
+
+    public static Boolean triggerIsEnabled(Type triggerHandler) {
+        return !disabledTriggerHandlers.contains(triggerHandler);
+    }
+
+    public static Boolean triggerIsEnabled(SObjectType objectType) {
+        return !disabledTriggerObjects.contains(objectType);
+    }
 
     public static void disableTriggers(Set<Type> triggerHandlers) {
         if (triggerHandlers != null) {

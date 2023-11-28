@@ -426,12 +426,12 @@ private with sharing class BaseTriggerHandlerTest {
     }
 
     @IsTest
-    static void processAfterRun_onFirstRun_valueAddedToSet() {
+    static void registerRun_onFirstRun_valueAddedToSet() {
         TestTriggerHandler triggerHandler = new TestTriggerHandler();
         triggerHandler.operationType = TriggerOperation.BEFORE_INSERT;
 
         Test.startTest();
-        triggerHandler.processAfterRun();
+        triggerHandler.registerRun();
         Test.stopTest();
 
         String triggerHandlerName = triggerHandler.triggerHandlerName;
@@ -444,7 +444,7 @@ private with sharing class BaseTriggerHandlerTest {
     }
 
     @IsTest
-    static void processAfterRun_onSecondRun_valueAddedToSet() {
+    static void registerRun_onSecondRun_valueAddedToSet() {
         TestTriggerHandler triggerHandler = new TestTriggerHandler();
         triggerHandler.operationType = TriggerOperation.BEFORE_INSERT;
 
@@ -453,7 +453,7 @@ private with sharing class BaseTriggerHandlerTest {
         BaseTriggerHandler.triggerHandlerAndOperation.add(triggerHandlerName + operationType);
 
         Test.startTest();
-        triggerHandler.processAfterRun();
+        triggerHandler.registerRun();
         Test.stopTest();
 
         Assert.isTrue(
@@ -463,6 +463,52 @@ private with sharing class BaseTriggerHandlerTest {
     }
 
     // Static methods to disable/enable trigger execution
+
+    @IsTest
+    static void triggerIsEnabled_passEnabledType_returnTrue() {
+        Type triggerHandler = TestTriggerHandler.class;
+
+        Test.startTest();
+        Boolean triggerIsEnabled = BaseTriggerHandler.triggerIsEnabled(triggerHandler);
+        Test.stopTest();
+
+        Assert.isTrue(triggerIsEnabled, 'Expected the trigger "TestTriggerHandler" to be enabled');
+    }
+
+    @IsTest
+    static void triggerIsEnabled_passDisabledType_returnFalse() {
+        Type triggerHandler = TestTriggerHandler.class;
+        BaseTriggerHandler.disabledTriggerHandlers.add(triggerHandler);
+
+        Test.startTest();
+        Boolean triggerIsEnabled = BaseTriggerHandler.triggerIsEnabled(triggerHandler);
+        Test.stopTest();
+
+        Assert.isFalse(triggerIsEnabled, 'Expected the trigger "TestTriggerHandler" to be disabled');
+    }
+
+    @IsTest
+    static void triggerIsEnabled_passEnabledObject_returnTrue() {
+        SObjectType objectType = Account.SObjectType;
+
+        Test.startTest();
+        Boolean triggerIsEnabled = BaseTriggerHandler.triggerIsEnabled(objectType);
+        Test.stopTest();
+
+        Assert.isTrue(triggerIsEnabled, 'Expected the trigger for Account to be enabled');
+    }
+
+    @IsTest
+    static void triggerIsEnabled_passDisabledObject_returnFalse() {
+        SObjectType objectType = Account.SObjectType;
+        BaseTriggerHandler.disabledTriggerObjects.add(objectType);
+
+        Test.startTest();
+        Boolean triggerIsEnabled = BaseTriggerHandler.triggerIsEnabled(objectType);
+        Test.stopTest();
+
+        Assert.isFalse(triggerIsEnabled, 'Expected the trigger for Account to be disabled');
+    }
 
     @IsTest
     static void disableTriggers_passSetOfTypePopulated_disabledTriggerHandlersPopulated() {
