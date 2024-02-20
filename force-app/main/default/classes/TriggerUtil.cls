@@ -1,4 +1,4 @@
-public with sharing class TriggerUtil {
+public inherited sharing class TriggerUtil {
     @TestVisible
     private DescribeSObjectResult sObjectDescribe;
     @TestVisible
