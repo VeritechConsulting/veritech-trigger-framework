@@ -1,7 +1,7 @@
 // Suppressing MethodNamingConventions because naming format is methodBeingTested_testScenario_expectedResult
 @SuppressWarnings('PMD.MethodNamingConventions')
 @IsTest(IsParallel=true)
-private with sharing class TriggerUtilTest {
+private without sharing class TriggerUtilTest {
     //================================================================================
     // Helpers
     //================================================================================
@@ -137,14 +137,15 @@ private with sharing class TriggerUtilTest {
 
     @IsTest
     static void getRecordTypeId_existingDeveloperName_idReturned() {
-        RecordType anyRecordType = [
+        List<RecordType> allRecordTypes = [
             SELECT Id, DeveloperName, SObjectType
             FROM RecordType
             WHERE IsActive = TRUE
-            LIMIT 1
         ];
 
-        if (anyRecordType != null) {
+        if (!allRecordTypes.isEmpty()) {
+            RecordType anyRecordType = allRecordTypes.get(0);
+
             TestTriggerHandler triggerHandler = new TestTriggerHandler();
             triggerHandler.sObjectType = getSObjectTypeFromString(anyRecordType.SObjectType);
 
@@ -186,9 +187,10 @@ private with sharing class TriggerUtilTest {
         triggerHandler.sObjectType = Account.SObjectType;
 
         TriggerUtil triggerUtil = new TriggerUtil(triggerHandler);
+        String developerName = null;
 
         Test.startTest();
-        Id recordTypeIdReturned = triggerUtil.getRecordTypeId(null);
+        Id recordTypeIdReturned = triggerUtil.getRecordTypeId(developerName);
         Test.stopTest();
 
         Assert.isNull(recordTypeIdReturned, 'Expected the resulting "recordTypeIdReturned" to be null');
