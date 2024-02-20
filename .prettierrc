@@ -1,4 +1,5 @@
 {
+    "apexInsertFinalNewline": false,
     "overrides": [
         {
             "files": "**/lwc/**/*.html",
@@ -9,12 +10,12 @@
             "options": { "parser": "html" }
         }
     ],
+    "plugins": ["prettier-plugin-apex"],
     "printWidth": 120,
     "tabWidth": 4,
     "semi": true,
     "singleQuote": true,
     "trailingComma": "none",
     "bracketSpacing": true,
-    "proseWrap": "always",
-    "apexInsertFinalNewline": false
+    "proseWrap": "always"
 }
