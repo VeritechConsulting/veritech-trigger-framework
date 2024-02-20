@@ -2,7 +2,7 @@
 A lightweight Apex trigger framework for Salesforce that is packed with functionality.
 
 ## How to install
-Simply, copy the class `BaseTriggerHandler` (and associated `BaseTriggerHandlerTest`) to your org and you are ready to start using the trigger framework!
+Copy the class `BaseTriggerHandler` (and associated `BaseTriggerHandlerTest`) to your org and you are ready to start using the trigger framework!
 
 Optionally, copy `TriggerUtil` (and `TriggerUtilTest`) if you would like to take advantage of the additional utilities included.
 
@@ -56,7 +56,8 @@ The following context variables have been retrieved from `Trigger` and are avail
 - `this.isUndelete`
 - `this.operationType`
 
-Note that all the lists and maps are initialized to empty collections by the trigger framework to reduce the need for null checks.
+> [!IMPORTANT]
+> All the lists and maps are initialized to empty collections by the trigger framework to reduce the need for null checks.
 
 ### Recursion prevention
 By default, the trigger framework prevents recursion in order to avoid hitting governor limits. However, if you need to allow recursion in your triggers, modify the trigger handler initialization by passing an optional Boolean parameter.
@@ -69,30 +70,32 @@ trigger AccountTrigger on Account(before insert, after insert) {
 ```
 
 ### Disabling trigger execution
-All triggers handlers are enabled by default. If you would like to disable the execution of a trigger handler for the current transaction, you can do so by passing either the trigger handler Type or the SObject as a parameter.
+All triggers handlers are enabled by default. If you would like to disable the execution of a trigger handler for the current transaction, you can do so by passing either the trigger handler `Type` or the `SObjectType` as a parameter.
 
 ```apex
 // Options for disabling triggers
 BaseTriggerHandler.disableTrigger(AccountTriggerHandler.class);
 BaseTriggerHandler.disableTrigger(Account.SObjectType);
-
-Set<Type> triggerHandlers = new Set<Type>{
+BaseTriggerHandler.disableTriggers(new Set<Type>{
     AccountTriggerHandler.class,
     OpportunityTriggerHandler.class,
-};
-BaseTriggerHandler.disableTriggers(triggerHandlers);
-
-Set<SObjectType> objectTriggers = new Set<SObjectType>{
+});
+BaseTriggerHandler.disableTriggers(new Set<SObjectType>{
     Account.SObjectType,
     Opportunity.SObjectType,
-};
-BaseTriggerHandler.disableTriggers(objectTriggers);
+});
 
 // Options for re-enabling triggers
 BaseTriggerHandler.enableTrigger(AccountTriggerHandler.class);
 BaseTriggerHandler.enableTrigger(Account.SObjectType);
-BaseTriggerHandler.enableTriggers(triggerHandlers);
-BaseTriggerHandler.enableTriggers(objectTriggers);
+BaseTriggerHandler.enableTriggers(new Set<Type>{
+    AccountTriggerHandler.class,
+    OpportunityTriggerHandler.class,
+});
+BaseTriggerHandler.enableTriggers(new Set<SObjectType>{
+    Account.SObjectType,
+    Opportunity.SObjectType,
+});
 ```
 
 ## Additional utilities
