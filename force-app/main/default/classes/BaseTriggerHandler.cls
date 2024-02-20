@@ -63,7 +63,7 @@ public abstract class BaseTriggerHandler {
     }
 
     protected BaseTriggerHandler(Boolean allowRecursion) {
-        this.allowRecursion = allowRecursion != null ? allowRecursion : ALLOW_RECURSION_DEFAULT;
+        this.allowRecursion = allowRecursion ?? ALLOW_RECURSION_DEFAULT;
         this.triggerHandlerName = this.getExecutingClassName();
         this.triggerHandlerType = this.getExecutingClassType();
 
@@ -76,10 +76,10 @@ public abstract class BaseTriggerHandler {
     @TestVisible
     private void initializeTriggerContext() {
         this.operationType = Trigger.operationType;
-        this.newList = Trigger.new == null ? new List<SObject>() : Trigger.new;
-        this.newMap = Trigger.newMap == null ? new Map<Id, SObject>() : Trigger.newMap;
-        this.oldList = Trigger.old == null ? new List<SObject>() : Trigger.old;
-        this.oldMap = Trigger.oldMap == null ? new Map<Id, SObject>() : Trigger.oldMap;
+        this.newList = Trigger.new ?? new List<SObject>();
+        this.newMap = Trigger.newMap ?? new Map<Id, SObject>();
+        this.oldList = Trigger.old ?? new List<SObject>();
+        this.oldMap = Trigger.oldMap ?? new Map<Id, SObject>();
         this.isBefore = Trigger.isBefore;
         this.isAfter = Trigger.isAfter;
         this.isInsert = Trigger.isInsert;

@@ -1,7 +1,7 @@
 // Suppressing MethodNamingConventions because naming format is methodBeingTested_testScenario_expectedResult
 @SuppressWarnings('PMD.MethodNamingConventions')
 @IsTest(IsParallel=true)
-private with sharing class BaseTriggerHandlerTest {
+private without sharing class BaseTriggerHandlerTest {
     //================================================================================
     // Unit tests
     //================================================================================
