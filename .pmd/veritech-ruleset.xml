@@ -26,11 +26,10 @@
         name="ClassReferenceCapitalization-ReferenceExpression"
         language="apex"
         message="References to classes should start with an uppercase character followed by lowercase characters"
-        class="net.sourceforge.pmd.lang.rule.XPathRule"
+        class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     >
         <priority>3</priority>
         <properties>
-            <property name="version" value="2.0" />
             <property name="xpath">
                 <value>
                     <![CDATA[
@@ -51,7 +50,6 @@
                                 or lower-case(@Image)='string'
                                 or lower-case(@Image)='time'
                                 or lower-case(@Image)='system'
-                                or lower-case(@Image)='database'
                                 or lower-case(@Image)='test'
                                 or lower-case(@Image)='assert'
                                 or lower-case(@Image)='messaging'
@@ -67,11 +65,10 @@
         name="ClassReferenceCapitalization-ModifierNode"
         language="apex"
         message="References to classes should start with an uppercase character followed by lowercase characters"
-        class="net.sourceforge.pmd.lang.rule.XPathRule"
+        class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     >
         <priority>3</priority>
         <properties>
-            <property name="version" value="2.0" />
             <property name="xpath">
                 <value>
                     <![CDATA[
@@ -93,11 +90,10 @@
         name="ClassReferenceCapitalization-Parameter"
         language="apex"
         message="References to classes should start with an uppercase character followed by lowercase characters"
-        class="net.sourceforge.pmd.lang.rule.XPathRule"
+        class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     >
         <priority>3</priority>
         <properties>
-            <property name="version" value="2.0" />
             <property name="xpath">
                 <value>
                     <![CDATA[
@@ -119,11 +115,10 @@
         name="UsageOfSystemAssert"
         language="apex"
         message="Use the Assert class in test methods instead of System.assert"
-        class="net.sourceforge.pmd.lang.rule.XPathRule"
+        class="net.sourceforge.pmd.lang.rule.xpath.XPathRule"
     >
         <priority>2</priority>
         <properties>
-            <property name="version" value="2.0" />
             <property name="xpath">
                 <value>
                     <![CDATA[
