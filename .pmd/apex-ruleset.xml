@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<!-- From the Apex PMD repo
-https://github.com/ChuckJonas/vscode-apex-pmd/blob/master/rulesets/apex_ruleset.xml -->
 <ruleset
     xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -66,10 +64,10 @@ https://github.com/ChuckJonas/vscode-apex-pmd/blob/master/rulesets/apex_ruleset.
       </properties>
    </rule>
    <rule ref="category/apex/design.xml/CognitiveComplexity">
-      <properties>
-         <property name="classReportLevel" value="50" />
-         <property name="methodReportLevel" value="15" />
-      </properties>
+    <properties>
+        <property name="classReportLevel" value="50" />
+        <property name="methodReportLevel" value="15" />
+    </properties>
    </rule>
 
    <!-- PERFORMANCE -->
@@ -277,7 +275,7 @@ https://github.com/ChuckJonas/vscode-apex-pmd/blob/master/rulesets/apex_ruleset.
     >
       <priority>3</priority>
       <properties>
-      </properties>
+         </properties>
    </rule>
    <rule
         ref="category/apex/codestyle.xml/ForLoopsMustUseBraces"
@@ -292,12 +290,12 @@ https://github.com/ChuckJonas/vscode-apex-pmd/blob/master/rulesets/apex_ruleset.
    <rule ref="category/apex/errorprone.xml/EmptyCatchBlock" message="Avoid empty catch blocks">
       <priority>3</priority>
       <properties>
-      </properties>
+         </properties>
    </rule>
    <rule ref="category/apex/errorprone.xml/EmptyIfStmt" message="Avoid empty 'if' statements">
       <priority>3</priority>
       <properties>
-      </properties>
+         </properties>
    </rule>
    <rule ref="category/apex/errorprone.xml/EmptyWhileStmt" message="Avoid empty 'while' statements">
       <priority>3</priority>
@@ -322,12 +320,12 @@ https://github.com/ChuckJonas/vscode-apex-pmd/blob/master/rulesets/apex_ruleset.
       </properties>
    </rule>
 
-   <!-- Visual Force -->
-   <rule ref="category/vf/security.xml/VfCsrf">
+  <!-- Visual Force -->
+  <rule ref="category/visualforce/security.xml/VfCsrf">
       <priority>3</priority>
    </rule>
 
-   <rule ref="category/vf/security.xml/VfUnescapeEl">
+   <rule ref="category/visualforce/security.xml/VfUnescapeEl">
       <priority>3</priority>
    </rule>
 </ruleset>
