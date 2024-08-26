@@ -60,12 +60,11 @@ The following context variables have been retrieved from `Trigger` and are avail
 > All the lists and maps are initialized to empty collections by the trigger framework to reduce the need for null checks.
 
 ### Recursion prevention
-By default, the trigger framework prevents recursion in order to avoid hitting governor limits. However, if you need to allow recursion in your triggers, modify the trigger handler initialization by passing an optional Boolean parameter.
+By default, the trigger framework prevents recursion in order to avoid exceeding governor limits. However, if you need to allow recursion in your triggers, execute the method `allowRecursion()` before calling `run()`.
 
 ```apex
 trigger AccountTrigger on Account(before insert, after insert) {
-    Boolean allowRecursion = true;
-    new AccountTriggerHandler(allowRecursion).run();
+    new AccountTriggerHandler().allowRecursion().run();
 }
 ```
 

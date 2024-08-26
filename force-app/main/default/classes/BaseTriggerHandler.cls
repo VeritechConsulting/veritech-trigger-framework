@@ -104,7 +104,7 @@ public abstract class BaseTriggerHandler {
     }
 
     //================================================================================
-    // Virtual (overridable) methods, run method, and run helpers
+    // Virtual (overridable) methods
     //================================================================================
 
     @TestVisible
@@ -127,6 +127,15 @@ public abstract class BaseTriggerHandler {
     }
     @TestVisible
     protected virtual void afterUndelete() {
+    }
+
+    //================================================================================
+    // Public methods and helpers
+    //================================================================================
+
+    public BaseTriggerHandler allowRecursion() {
+        this.allowRecursion = true;
+        return this;
     }
 
     public void run() {

@@ -179,7 +179,7 @@ private without sharing class BaseTriggerHandlerTest {
         );
     }
 
-    // Virtual (overridable) methods, run method, and run helpers
+    // Virtual (overridable) methods
 
     // Suppressing ApexUnitTestClassShouldHaveAsserts because there is no logic in the overridable methods
     @SuppressWarnings('PMD.ApexUnitTestClassShouldHaveAsserts')
@@ -196,6 +196,26 @@ private without sharing class BaseTriggerHandlerTest {
         triggerHandler.afterDelete();
         triggerHandler.afterUndelete();
         Test.stopTest();
+    }
+
+    // Public methods and helpers
+
+    @IsTest
+    static void allowRecursion_noParameters_recursionEnabled() {
+        TestTriggerHandler triggerHandler = new TestTriggerHandler();
+        Assert.isFalse(
+            triggerHandler.allowRecursion,
+            'Expected the class property "allowRecursion" to be false initially'
+        );
+
+        Test.startTest();
+        triggerHandler.allowRecursion();
+        Test.stopTest();
+
+        Assert.isTrue(
+            triggerHandler.allowRecursion,
+            'Expected the class property "allowRecursion" to be true after the method call'
+        );
     }
 
     @IsTest
